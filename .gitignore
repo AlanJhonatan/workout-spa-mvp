@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+**/node_modules
+dist
+**/dist
+dist-ssr
+**/dist-ssr
+*.local
+
+# Turborepo
+.turbo
+dist
+
+# Docker
+.env.docker
+.env.local
+.env
+
+# Database
+drizzle/
+**/*.db
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sw?

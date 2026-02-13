@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { type Food } from "@/types";
 import { Beef, Drumstick, Flame, Wheat } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface FoodProfileSheetProps {
   food: Food | null;
@@ -24,13 +24,7 @@ const InfoRow = ({ icon, label, value, unit }: { icon: React.ReactNode, label: s
 );
 
 export const FoodProfileSheet = ({ food, isOpen, onClose }: FoodProfileSheetProps) => {
-  const [currentGrams, setCurrentGrams] = useState(food?.grams || 0);
-  
-  useEffect(() => {
-    if (food) {
-      setCurrentGrams(food.grams);
-    }
-  }, [food]);
+  const [currentGrams, setCurrentGrams] = useState(() => food?.grams || 0);
 
   if (!food) return null;
 

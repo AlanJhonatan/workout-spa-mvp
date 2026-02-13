@@ -1,8 +1,10 @@
-import { cva, type VariantProps } from "class-variance-authority"
+/* eslint-disable react-refresh/only-export-components */
+import { type VariantProps } from "class-variance-authority"
 import { Tabs as TabsPrimitive } from "radix-ui"
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { tabsListVariants } from "./tabs-variants"
 
 function Tabs({
   className,
@@ -22,21 +24,6 @@ function Tabs({
     />
   )
 }
-
-const tabsListVariants = cva(
-  "rounded-lg p-[3px] data-[variant=line]:rounded-none group/tabs-list text-muted-foreground inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
-  {
-    variants: {
-      variant: {
-        default: "bg-muted",
-        line: "gap-1 bg-transparent",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
 
 function TabsList({
   className,
@@ -86,5 +73,6 @@ function TabsContent({
   )
 }
 
-export { Tabs, TabsContent, TabsList, tabsListVariants, TabsTrigger }
+export { tabsListVariants } from "./tabs-variants"
+export { Tabs, TabsContent, TabsList, TabsTrigger }
 

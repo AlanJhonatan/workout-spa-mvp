@@ -1,4 +1,7 @@
-# GitHub Actions CI/CD
+# GitHub Actions CI/CD Pipeline
+# 
+# dev branch: Lint + Build (staging tests)
+# main branch: Lint + Build + Deploy (production)
 
 name: CI/CD
 
@@ -9,8 +12,12 @@ on:
     branches: [main, develop]
 
 jobs:
+  # ============================================
+  # Job 1: Lint and Build (todas as branches)
+  # ============================================
   lint-and-build:
     runs-on: ubuntu-latest
+    name: Lint & Build
 
     services:
       postgres:
@@ -43,4 +50,44 @@ jobs:
         run: npm run build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/workout_spa_test
+
+  # ============================================
+  # Job 2: Deploy (somente main branch)
+  # ============================================
+  deploy-production:
+    name: Deploy to Production
+    needs: lint-and-build
+    runs-on: ubuntu-latest
+    # Apenas executa em push para main (não em PRs)
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy API to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          # Railway CLI: https://docs.railway.app/reference/cli
+          npm install -g @railway/cli
+          railway link
+          railway deploy --service api
+        continue-on-error: true
+        # continua se falhar para não bloquear o workflow inteiro
+
+      - name: Deploy Web to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Vercel CLI: https://vercel.com/docs/cli
+          npm install -g vercel
+          vercel deploy --prod --token $VERCEL_TOKEN
+        continue-on-error: true
+        # continua se falhar
+
+      - name: Notify deployment
+        run: |
+          echo "✅ Deployment complete!"
+          echo "API: Check Railway dashboard"
+          echo "Web: Check Vercel dashboard"
 

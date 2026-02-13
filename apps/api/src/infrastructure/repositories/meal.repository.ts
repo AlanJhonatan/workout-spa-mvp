@@ -1,7 +1,7 @@
-import { eq, and } from 'drizzle-orm'
+import { IMeal, IMealFood, IMealRepository } from '@/domain'
+import { db, Meal, mealFoodsTable, mealsTable } from '@/infrastructure/database'
+import { and, eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
-import { IMeal, IMealRepository, IMealFood } from '@/domain'
-import { db, mealsTable, mealFoodsTable, Meal } from '@/infrastructure/database'
 
 export class MealRepository implements IMealRepository {
   async create(meal: Omit<IMeal, 'id' | 'createdAt' | 'lastUpdate' | 'mealFoods'>): Promise<IMeal> {
@@ -100,7 +100,7 @@ export class MealRepository implements IMealRepository {
       .where(and(eq(mealFoodsTable.mealId, mealId), eq(mealFoodsTable.foodId, foodId)))
   }
 
-  private mapToIMeal(meal: Meal, foods: any[]): IMeal {
+  private mapToIMeal(meal: Meal, foods: typeof mealFoodsTable.$inferSelect[]): IMeal {
     return {
       id: meal.id,
       name: meal.name,

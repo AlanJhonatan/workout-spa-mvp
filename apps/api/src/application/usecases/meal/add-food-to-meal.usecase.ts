@@ -1,5 +1,5 @@
-import { injectable, inject } from 'tsyringe'
-import { IMeal, IMealRepository, IMealFood } from '@/domain'
+import { IMealFood, IMealRepository } from '@/domain'
+import { inject, injectable } from 'tsyringe'
 
 @injectable()
 export class AddFoodToMealUseCase {

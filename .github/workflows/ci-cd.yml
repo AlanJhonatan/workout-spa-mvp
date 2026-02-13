@@ -1,4 +1,4 @@
-# GitHub Actions CI/CD example
+# GitHub Actions CI/CD
 
 name: CI/CD
 
@@ -9,7 +9,7 @@ on:
     branches: [main, develop]
 
 jobs:
-  build:
+  lint-and-build:
     runs-on: ubuntu-latest
 
     services:
@@ -44,18 +44,3 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/workout_spa_test
 
-      - name: Build Docker images
-        run: docker-compose build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy to production
-        run: |
-          # Deploy script here
-          echo "Deploying to production..."

@@ -1,29 +1,19 @@
-import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { PlusCircle } from "lucide-react";
-import { useState } from "react";
-import type { Meal } from "@/types";
-import { initialMeals } from "@/mocks/MealData";
+
+// Store
+import { useMealStore } from "./store/meal.store";
 
 // Components
+import { DaySelector } from "./components/DaySelector/DaySelector";
 import { MealSummary } from "./components/MealSummary/MealSummary";
 import { MealsList } from "./components/MealsList/MealsList";
-import { DaySelector } from "./components/DaySelector/DaySelector";
 
 export function MealSchedulePage() {
-  const [meals, setMeals] = useState<Meal[]>(initialMeals);
-  const [nextMealId, setNextMealId] = useState(3);
-  const [selectedDay, setSelectedDay] = useState("monday");
-
-  const handleAddMeal = () => {
-    const newMeal: Meal = {
-      id: nextMealId,
-      title: `Meal ${nextMealId}`,
-      foods: [],
-    };
-    setMeals([...meals, newMeal]);
-    setNextMealId((prev) => prev + 1);
-  };
+  const meals = useMealStore((state) => state.meals);
+  const addMeal = useMealStore((state) => state.addMeal);
+  const selectedDay = "monday";
 
   const totals = meals.reduce(
     (acc, meal) => {
@@ -48,7 +38,7 @@ export function MealSchedulePage() {
           <p className="text-neutral-500">Log and manage your daily meals.</p>
         </header>
 
-        <Tabs value={selectedDay} onValueChange={setSelectedDay} className="w-full">
+        <Tabs value={selectedDay} className="w-full">
           <DaySelector />
 
           {/* Empty states for other days */}
@@ -67,10 +57,10 @@ export function MealSchedulePage() {
             <MealSummary totals={totals} />
 
             <div className="space-y-4">
-              <MealsList meals={meals} onMealsChange={setMeals} />
+              <MealsList meals={meals} />
 
               <Button
-                onClick={handleAddMeal}
+                onClick={addMeal}
                 variant="ghost"
                 className="w-full border-2 border-dashed"
               >

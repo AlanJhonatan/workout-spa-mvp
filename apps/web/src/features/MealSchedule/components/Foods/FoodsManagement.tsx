@@ -1,36 +1,20 @@
-import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
 import type { Food } from "@/types";
-import { FoodsList } from "./FoodsList";
+import { useState } from "react";
+import { useFoods } from "../../hooks/useFoods";
 import { FoodProfileSheet } from "./FoodProfileSheet";
+import { FoodsList } from "./FoodsList";
 
-export function FoodsManagement() {
+interface FoodsManagementProps {
+  mealId?: number;
+}
+
+export function FoodsManagement({ mealId }: FoodsManagementProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [foods, setFoods] = useState<Food[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const { loading, error, searchFoods } = useFoods();
 
-  useEffect(() => {
-    const fetchFoods = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get<Food[]>("/foods");
-        setFoods(response.data);
-      } catch (err) {
-        setError("Failed to fetch foods");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFoods();
-  }, []);
-
-  const filteredFoods = foods.filter((food) =>
-    food.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredFoods = searchFoods(searchTerm);
 
   return (
     <div className="space-y-4">
@@ -54,11 +38,22 @@ export function FoodsManagement() {
         />
       )}
 
-      <FoodProfileSheet
-        food={selectedFood}
-        isOpen={!!selectedFood}
-        onClose={() => setSelectedFood(null)}
-      />
+      {mealId && selectedFood && (
+        <FoodProfileSheet
+          food={selectedFood}
+          isOpen={!!selectedFood}
+          onClose={() => setSelectedFood(null)}
+          mealId={mealId}
+        />
+      )}
+
+      {!mealId && selectedFood && (
+        <FoodProfileSheet
+          food={selectedFood}
+          isOpen={!!selectedFood}
+          onClose={() => setSelectedFood(null)}
+        />
+      )}
     </div>
   );
 }

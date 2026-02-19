@@ -31,7 +31,7 @@ export function MealCard({ meal, onRemoveFood }: MealCardProps) {
               <SheetTitle>Add Food to Meal</SheetTitle>
             </SheetHeader>
             <div className="mt-4">
-              <FoodsManagement />
+              <FoodsManagement mealId={meal.id} />
             </div>
           </SheetContent>
         </Sheet>

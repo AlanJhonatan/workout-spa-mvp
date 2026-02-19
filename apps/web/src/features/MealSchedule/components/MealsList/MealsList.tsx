@@ -1,23 +1,16 @@
 import type { Meal } from "@/types";
+import { useMealStore } from "../../store/meal.store";
 import { MealCard } from "../MealCard/MealCard";
 
 interface MealsListProps {
   meals: Meal[];
-  onMealsChange: (meals: Meal[]) => void;
 }
 
-export function MealsList({ meals, onMealsChange }: MealsListProps) {
+export function MealsList({ meals }: MealsListProps) {
+  const removeFoodFromMeal = useMealStore((state) => state.removeFoodFromMeal);
+
   const handleRemoveFood = (mealId: number, foodIndex: number) => {
-    const updatedMeals = meals.map((meal) => {
-      if (meal.id === mealId) {
-        return {
-          ...meal,
-          foods: meal.foods.filter((_, idx) => idx !== foodIndex),
-        };
-      }
-      return meal;
-    });
-    onMealsChange(updatedMeals);
+    removeFoodFromMeal(mealId, foodIndex);
   };
 
   return (

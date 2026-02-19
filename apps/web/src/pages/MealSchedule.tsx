@@ -1,11 +1,11 @@
 import { MealCard } from "@/components/meal/MealCard";
+import { MealSummaryCard } from "@/components/meal/MealSummaryCard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { initialMeals } from "@/mocks/MealData";
 import type { Meal } from "@/types";
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
-import { MealSummaryCard } from "@/components/meal/MealSummaryCard";
-import { initialMeals } from "@/mocks/MealData";
 
 export function MealSchedulePage() {
   const [meals, setMeals] = useState<Meal[]>(initialMeals);
@@ -25,11 +25,11 @@ export function MealSchedulePage() {
     meal.foods.forEach(food => {
       acc.calories += food.calories;
       acc.protein += food.protein;
-      acc.carbs += food.carbs;
+      acc.carbohydrates += food.carbohydrates;
       acc.fat += food.fat;
     });
     return acc;
-  }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  }, { calories: 0, protein: 0, carbohydrates: 0, fat: 0 });
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">

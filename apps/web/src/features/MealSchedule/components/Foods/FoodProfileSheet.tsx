@@ -6,24 +6,28 @@ import type { Food } from "@/types";
 import { Beef, Droplet, Flame, Wheat } from "lucide-react";
 import { useState } from "react";
 import { MealItemInfo } from "../MealItemInfo/MealItemInfo";
+import { useMealStore } from "../../store/meal.store";
 
 interface FoodProfileSheetProps {
   food: Food | null;
   isOpen: boolean;
   onClose: () => void;
+  mealId?: number;
 }
 
 export function FoodProfileSheet({
   food,
   isOpen,
   onClose,
+  mealId,
 }: FoodProfileSheetProps) {
   const [grams, setGrams] = useState(100);
+  const addFoodToMeal = useMealStore((state) => state.addFoodToMeal);
 
   if (!food) return null;
 
   const multiplier = grams / 100;
-  const adjustedFood = {
+  const adjustedFood: Food = {
     ...food,
     calories: food.calories * multiplier,
     protein: food.protein * multiplier,
@@ -32,7 +36,10 @@ export function FoodProfileSheet({
   };
 
   const handleAddToMeal = () => {
-    console.log("Adding food to meal:", { ...adjustedFood, grams });
+    if (mealId) {
+      addFoodToMeal(mealId, adjustedFood);
+    }
+    console.log("Adding food to meal:", { food: adjustedFood, grams, mealId });
     onClose();
   };
 
@@ -92,7 +99,7 @@ export function FoodProfileSheet({
             <Button variant="outline" onClick={onClose} className="flex-1">
               Cancel
             </Button>
-            <Button onClick={handleAddToMeal} className="flex-1">
+            <Button onClick={handleAddToMeal} className="flex-1" disabled={!mealId}>
               Add to Meal
             </Button>
           </div>

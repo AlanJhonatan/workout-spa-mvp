@@ -7,17 +7,6 @@ import { api } from "@/lib/api";
 import { type Food } from "@/types";
 import { useEffect, useState } from "react";
 
-// Mock data for food database
-// const mockFoodDatabase: Food[] = [
-//   { id: uuidv4(), name: 'Apple', calories: 95, protein: 0.5, carbs: 25, fat: 0.3, grams: 182 },
-//   { id: uuidv4(), name: 'Banana', calories: 105, protein: 1.3, carbs: 27, fat: 0.3, grams: 118 },
-//   { id: uuidv4(), name: 'Chicken Breast (cooked)', calories: 165, protein: 31, carbs: 0, fat: 3.6, grams: 100 },
-//   { id: uuidv4(), name: 'Brown Rice (cooked)', calories: 111, protein: 2.6, carbs: 23, fat: 0.9, grams: 100 },
-//   { id: uuidv4(), name: 'Broccoli (steamed)', calories: 55, protein: 3.7, carbs: 11, fat: 0.6, grams: 150 },
-//   { id: uuidv4(), name: 'Egg (large)', calories: 78, protein: 6, carbs: 0.6, fat: 5, grams: 50 },
-//   { id: uuidv4(), name: 'Oats', calories: 89, protein: 3.4, carbs: 19, fat: 0.4, grams: 100 },
-// ];
-
 export function FoodsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
@@ -70,7 +59,7 @@ export function FoodsPage() {
 
         {/* Added flex-1 and overflow-hidden to make this TabContent take available height and allow ScrollArea */}
         <TabsContent value="food-database" className="mt-4 flex-1 flex flex-col overflow-hidden">
-          <div className="mb-4 flex-shrink-0"> {/* Added flex-shrink-0 */}
+          <div className="mb-4 shrink-0"> {/* Adjusted height for input */}
             <Input
               type="text"
               placeholder="Search for foods..."

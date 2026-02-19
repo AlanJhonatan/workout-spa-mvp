@@ -8,6 +8,7 @@ export interface Macronutrients {
 export type Food = {
   id: string;
   name: string;
+  grams?: number;
 } & Macronutrients
 
 export interface Meal {

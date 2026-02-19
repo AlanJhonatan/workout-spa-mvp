@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BottomNavBar, type View } from './components/nav/BottomNavBar';
-import { MealSchedulePage } from './pages/MealSchedule';
+import { MealSchedulePage } from './features/MealSchedule/MealSchedulePage';
 
 // A simple placeholder for the future Workouts page
 const WorkoutsPage = () => (

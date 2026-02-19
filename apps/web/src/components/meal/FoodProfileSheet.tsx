@@ -30,10 +30,11 @@ export const FoodProfileSheet = ({ food, isOpen, onClose }: FoodProfileSheetProp
 
   // Calculate macros for the current grams
   const factor = currentGrams / food.grams; // Original grams vs. current grams
+
   const calculatedMacros = {
     calories: food.calories * factor,
     protein: food.protein * factor,
-    carbs: food.carbs * factor,
+    carbs: food.carbohydrates * factor,
     fat: food.fat * factor,
   };
 

@@ -1,13 +1,12 @@
-import 'reflect-metadata'
-import express from 'express'
-import cors from 'cors'
-import swaggerJsdoc from 'swagger-jsdoc'
-import swaggerUiExpress from 'swagger-ui-express'
-import { container } from 'tsyringe'
 import { IFoodRepository, IMealRepository } from '@/domain'
 import { FoodRepository, MealRepository } from '@/infrastructure'
 import foodRoutes from '@/presentation/routes/food.routes'
 import mealRoutes from '@/presentation/routes/meal.routes'
+import cors from 'cors'
+import express from 'express'
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
+import { container } from 'tsyringe'
 
 // Register dependencies
 container.register<IFoodRepository>('FoodRepository', {

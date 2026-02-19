@@ -1,29 +1,47 @@
-// src/pages/Foods.tsx
 import { FoodProfileSheet } from "@/components/meal/FoodProfileSheet";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"; // Import ScrollArea
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { api } from "@/lib/api";
 import { type Food } from "@/types";
-import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+import { useEffect, useState } from "react";
 
 // Mock data for food database
-const mockFoodDatabase: Food[] = [
-  { id: uuidv4(), name: 'Apple', calories: 95, protein: 0.5, carbs: 25, fat: 0.3, grams: 182 },
-  { id: uuidv4(), name: 'Banana', calories: 105, protein: 1.3, carbs: 27, fat: 0.3, grams: 118 },
-  { id: uuidv4(), name: 'Chicken Breast (cooked)', calories: 165, protein: 31, carbs: 0, fat: 3.6, grams: 100 },
-  { id: uuidv4(), name: 'Brown Rice (cooked)', calories: 111, protein: 2.6, carbs: 23, fat: 0.9, grams: 100 },
-  { id: uuidv4(), name: 'Broccoli (steamed)', calories: 55, protein: 3.7, carbs: 11, fat: 0.6, grams: 150 },
-  { id: uuidv4(), name: 'Egg (large)', calories: 78, protein: 6, carbs: 0.6, fat: 5, grams: 50 },
-  { id: uuidv4(), name: 'Oats', calories: 89, protein: 3.4, carbs: 19, fat: 0.4, grams: 100 },
-];
+// const mockFoodDatabase: Food[] = [
+//   { id: uuidv4(), name: 'Apple', calories: 95, protein: 0.5, carbs: 25, fat: 0.3, grams: 182 },
+//   { id: uuidv4(), name: 'Banana', calories: 105, protein: 1.3, carbs: 27, fat: 0.3, grams: 118 },
+//   { id: uuidv4(), name: 'Chicken Breast (cooked)', calories: 165, protein: 31, carbs: 0, fat: 3.6, grams: 100 },
+//   { id: uuidv4(), name: 'Brown Rice (cooked)', calories: 111, protein: 2.6, carbs: 23, fat: 0.9, grams: 100 },
+//   { id: uuidv4(), name: 'Broccoli (steamed)', calories: 55, protein: 3.7, carbs: 11, fat: 0.6, grams: 150 },
+//   { id: uuidv4(), name: 'Egg (large)', calories: 78, protein: 6, carbs: 0.6, fat: 5, grams: 50 },
+//   { id: uuidv4(), name: 'Oats', calories: 89, protein: 3.4, carbs: 19, fat: 0.4, grams: 100 },
+// ];
 
 export function FoodsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const [foods, setFoods] = useState<Food[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredFoods = mockFoodDatabase.filter(food =>
+  useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get<Food[]>('/foods');
+        setFoods(response.data);
+      } catch (err) {
+        setError('Failed to fetch foods');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFoods();
+  }, []);
+
+  const filteredFoods = foods.filter(food =>
     food.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -55,30 +73,43 @@ export function FoodsPage() {
           <div className="mb-4 flex-shrink-0"> {/* Added flex-shrink-0 */}
             <Input
               type="text"
-              placeholder="Search food..."
+              placeholder="Search for foods..."
+              className="mb-4"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
-          {/* Wrapped food list with ScrollArea and added flex-1 */}
-          <ScrollArea className="flex-1">
-            <div className="space-y-2 pr-4"> {/* Added pr-4 for scrollbar */}
-              {filteredFoods.length > 0 ? (
-                filteredFoods.map((food) => (
-                  <Card key={food.id} className="cursor-pointer hover:bg-neutral-50" onClick={() => setSelectedFood(food)}>
-                    <CardContent className="flex justify-between items-center p-4">
-                      <span className="font-medium">{food.name}</span>
-                      <span className="text-sm text-neutral-600">{food.calories} kcal</span>
-                    </CardContent>
-                  </Card>
-                ))
-              ) : (
-                <p className="text-center text-neutral-500 py-4">No foods found.</p>
-              )}
+          {loading && <p className="text-center text-neutral-500">Loading foods...</p>}
+          {error && <p className="text-center text-red-500">{error}</p>}
+
+          {!loading && !error && filteredFoods.length === 0 && (
+            <p className="text-center text-neutral-500">No foods found.</p>
+          )}
+
+          <ScrollArea className="h-[calc(100%-4rem)]"> {/* Adjusted height for input */}
+            <div className="grid gap-4">
+              {!loading && !error && filteredFoods.map(food => (
+                <Card
+                  key={food.id}
+                  className="cursor-pointer hover:bg-neutral-50 transition-colors"
+                  onClick={() => setSelectedFood(food)}
+                >
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold">{food.name}</h3>
+                    <p className="text-sm text-neutral-500">{food.calories} kcal</p>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
             <ScrollBar orientation="vertical" />
           </ScrollArea>
         </TabsContent>
+
+        <FoodProfileSheet
+          food={selectedFood}
+          isOpen={!!selectedFood}
+          onClose={() => setSelectedFood(null)}
+        />
       </Tabs>
 
       <FoodProfileSheet

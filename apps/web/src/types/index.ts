@@ -1,6 +1,6 @@
 export interface Macronutrients {
   calories: number;
-  carbs: number;
+  carbohydrates: number;
   protein: number;
   fat: number;
 }
@@ -8,7 +8,6 @@ export interface Macronutrients {
 export type Food = {
   id: string;
   name: string;
-  grams: number;
 } & Macronutrients
 
 export interface Meal {

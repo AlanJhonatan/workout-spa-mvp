@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/main.js",
     "lint": "eslint src",
+    "db:seed": "tsx src/infrastructure/database/seed.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
@@ -15,7 +16,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.40.0",
+    "drizzle-orm": "^0.40.1",
     "express": "^4.21.0",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
@@ -32,7 +33,7 @@
     "@types/pg": "^8.16.0",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
-    "drizzle-kit": "^0.25.0",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
     "pg": "^8.13.2",

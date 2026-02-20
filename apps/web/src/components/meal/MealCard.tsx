@@ -53,7 +53,7 @@ export const MealCard = ({ meal }: MealCardProps) => {
               <div className="flex items-center gap-2 sm:gap-4 text-xs">
                   <InfoRow icon={<Flame size={12} />} label="Cal" value={food.calories.toFixed(0)} unit="" />
                   <InfoRow icon={<Drumstick size={12} />} label="P" value={food.protein.toFixed(1)} unit="g" />
-                  <InfoRow icon={<Wheat size={12} />} label="C" value={food.carbs.toFixed(1)} unit="g" />
+                  <InfoRow icon={<Wheat size={12} />} label="C" value={food.carbohydrates.toFixed(1)} unit="g" />
                   <InfoRow icon={<Beef size={12} />} label="F" value={food.fat.toFixed(1)} unit="g" />
               </div>
             </div>

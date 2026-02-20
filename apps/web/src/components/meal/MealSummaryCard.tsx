@@ -18,7 +18,7 @@ export function MealSummaryCard(props: IMealSummaryCardProps) {
       <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <InfoRow icon={<Flame size={16} />} label="Calories" value={totals.calories.toFixed(0)} unit="kcal" />
         <InfoRow icon={<Drumstick size={16} />} label="Protein" value={totals.protein.toFixed(1)} unit="g" />
-        <InfoRow icon={<Wheat size={16} />} label="Carbs" value={totals.carbs.toFixed(1)} unit="g" />
+        <InfoRow icon={<Wheat size={16} />} label="Carbs" value={totals.carbohydrates.toFixed(1)} unit="g" />
         <InfoRow icon={<Beef size={16} />} label="Fat" value={totals.fat.toFixed(1)} unit="g" />
       </CardContent>
     </Card>
